@@ -1,0 +1,16 @@
+name: Integration
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Installing pnpm
+        run: npm install -g pnpm
+
+      - name: Building App
+        run: pnpm build
