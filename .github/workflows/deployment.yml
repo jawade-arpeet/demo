@@ -1,13 +1,16 @@
-name: Integration
+name: Deployment
 
 on:
-  push:
-    branches:
-      - master
+  workflow_run:
+    workflows: ["Integration"]
+    types: [completed]
 
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,5 +21,5 @@ jobs:
       - name: Installing dependencies
         run: pnpm install
 
-      - name: Building App
-        run: pnpm build
+      - name: Docker Build
+        run: docker build -t demo:${{ github.sha }} .
